@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> This fork allows you to provide a `Host` header override and disable SSL validation. Please use with caution.
+
 # OpenAI Python Library
 
 The OpenAI Python library provides convenient access to the OpenAI API

@@ -84,8 +84,9 @@ def _make_session() -> requests.Session:
             return openai.requestssession
         return openai.requestssession()
     if not openai.verify_ssl_certs:
-        warnings.warn("verify_ssl_certs is ignored; openai always verifies.")
+        warnings.warn("verify_ssl_certs is recommended, please use with caution")
     s = requests.Session()
+    s.verify = openai.verify_ssl_certs
     proxies = _requests_proxies_arg(openai.proxy)
     if proxies:
         s.proxies = proxies
@@ -144,6 +145,7 @@ class APIRequestor:
         )
         self.api_version = api_version or openai.api_version
         self.organization = organization or openai.organization
+        self.host = openai.host_override or None
 
     @classmethod
     def format_app_info(cls, info):
@@ -512,6 +514,8 @@ class APIRequestor:
         if openai.debug:
             headers["OpenAI-Debug"] = "true"
         headers.update(extra)
+        if self.host:
+            headers["Host"] = self.host
 
         return headers
 
